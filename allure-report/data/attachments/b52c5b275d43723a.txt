@@ -1,0 +1,5 @@
+Current URL is: https://dev.kredsafe.net/accept-otp
+OTP required, proceeding to fetch OTP
+📨 Full email content: Please verify your identity. The code will expire in 5 minutes. Your one time verification code is 617396.
+✅ Extracted OTP: 617396
+✅ OTP submitted successfully

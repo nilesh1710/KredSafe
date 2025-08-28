@@ -1,1 +1,1 @@
-[{"data":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]
+[{"reportUrl":"http://127.0.0.1:5050","data":{"failed":1,"broken":3,"skipped":0,"passed":2,"unknown":0,"total":6}},{"reportUrl":"http://127.0.0.1:5050","data":{"failed":1,"broken":3,"skipped":0,"passed":1,"unknown":0,"total":5}}]

@@ -1,2 +1,7 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","60148","Verify Work experience","webkit","Thu Aug 28 10:36:23 IST 2025","broken","Thu Aug 28 10:37:24 IST 2025","","Felloship.spec.js","",""
+"","27303","Verify OTP via YOPMail","chrome","Thu Aug 28 12:10:00 IST 2025","passed","Thu Aug 28 12:10:28 IST 2025","","VerifyOTP.spec.js","",""
 "","36514","Verify Work Board","chrome","Tue Aug 26 18:13:13 IST 2025","passed","Tue Aug 26 18:13:49 IST 2025","","BoardCertifciate.spec.js","",""
+"","5","Verify Work experience","chrome-lambdatest","Thu Aug 28 10:36:23 IST 2025","failed","Thu Aug 28 10:36:23 IST 2025","","Felloship.spec.js","",""
+"","60054","Verify Work experience","chrome","Thu Aug 28 10:36:23 IST 2025","broken","Thu Aug 28 10:37:23 IST 2025","","Felloship.spec.js","",""
+"","60187","Verify Work experience","firefox","Thu Aug 28 10:36:23 IST 2025","broken","Thu Aug 28 10:37:24 IST 2025","","Felloship.spec.js","",""

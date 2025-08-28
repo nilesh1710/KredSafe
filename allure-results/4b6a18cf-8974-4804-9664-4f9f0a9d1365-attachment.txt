@@ -1,0 +1,2 @@
+Current URL is: https://dev.kredsafe.net/accept-otp
+OTP required, proceeding to fetch OTP

@@ -4,7 +4,7 @@ test('Verify Work Board', async ({ page }) => {
     test.setTimeout(60000); // 60 seconds
 
   await page.goto('https://dev.kredsafe.net/login');
-  await page.locator('//input[@name="email"]').fill('hrd29@mailinator.com');
+  await page.locator('//input[@name="email"]').fill('ts0911@yopmail.com');
 await page.locator('//input[@name="password"]').fill('Nilesh@2025');
 await page.locator('//*[@id="id_frm_submit"]').click();
 await page.waitForLoadState('networkidle');

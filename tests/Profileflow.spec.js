@@ -5,7 +5,7 @@ test('Verify login and complete all user profile sections', async ({ page }) => 
 
   // -------- LOGIN --------
   await page.goto('https://dev.kredsafe.net/login');
-  await page.locator('input[name="email"]').fill('hrd29@mailinator.com');
+  await page.locator('input[name="email"]').fill('ts0911@yopmail.com');
   await page.locator('input[name="password"]').fill('Nilesh@2025');
   await page.locator('#id_frm_submit').click();
   await page.waitForLoadState('networkidle');
@@ -20,7 +20,7 @@ await page.waitForTimeout(1000);
   await page.locator('//input[@name="dob"]').fill('11/11/1990');
 
   // Fill SSN
-  await page.locator('//*[@id="ssn-field"]').fill('128006739'); // Replace with your SSN variable
+  await page.locator('//*[@id="ssn-field"]').fill('128004939'); // Replace with your SSN variable
   //await page.keyboard.press('Tab');
   await page.waitForTimeout(1000); // wait 15 seconds
 
@@ -283,6 +283,8 @@ await page.evaluate(el => el.click(), await boardCertSubmitBtn.elementHandle());
   await page.waitForTimeout(2000);
 
   // Click "click here" link
+  await page.waitForURL('https://dev.kredsafe.net/user/statement', { timeout: 15000 });
+  await page.waitForLoadState('networkidle');
 const clickHereLink = page.locator('//a[text()="click here"]');
 await clickHereLink.waitFor({ state: 'visible' });
 await clickHereLink.scrollIntoViewIfNeeded();

@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Known Issue",
+    "messageRegex": ".*Known issue.*",
+    "matchedStatuses": ["failed"]
+  },
+  {
+    "name": "Flaky",
+    "messageRegex": ".*flaky.*",
+    "matchedStatuses": ["failed"]
+  }
+]
