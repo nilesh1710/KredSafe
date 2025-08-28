@@ -1,0 +1,22 @@
+{
+  "name": "my-playwright-kredsafe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "allure-commandline": "^2.34.1",
+    "allure-playwright": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
