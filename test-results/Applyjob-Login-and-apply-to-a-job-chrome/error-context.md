@@ -1,0 +1,190 @@
+# Page snapshot
+
+```yaml
+- navigation:
+  - link:
+    - /url: /frontend/profile/home
+    - img
+  - link:
+    - /url: javascript:void(0)
+  - list:
+    - listitem:
+      - link "SM":
+        - /url: "#"
+- navigation:
+  - region "scrollable content":
+    - paragraph: Smith Mac
+    - list:
+      - listitem:
+        - link "Home":
+          - /url: /frontend/profile/home
+          - img
+          - text: Home
+      - listitem:
+        - link "Profile":
+          - /url: /frontend/profile/dashboard
+          - img
+          - text: Profile
+      - listitem:
+        - link "Jobs":
+          - /url: /frontend/profile/candidate-jobs
+          - img
+          - text: Jobs
+- main:
+  - heading "Jobs" [level=1]
+  - textbox "Search..."
+  - table:
+    - rowgroup:
+      - row "Job Id Job Title Job Description Job Type Required Skill Job Created Job Expired Status Action":
+        - columnheader "Job Id":
+          - button "Job Id"
+        - columnheader "Job Title":
+          - button "Job Title"
+        - columnheader "Job Description":
+          - button "Job Description"
+        - columnheader "Job Type":
+          - button "Job Type"
+        - columnheader "Required Skill":
+          - button "Required Skill"
+        - columnheader "Job Created":
+          - button "Job Created"
+        - columnheader "Job Expired":
+          - button "Job Expired"
+        - columnheader "Status":
+          - button "Status"
+        - columnheader "Action"
+    - rowgroup:
+      - row "55 Java Developer Java Developer FTE 2025-06-02 2025-09-28 Applied Applied":
+        - cell "55"
+        - cell "Java Developer":
+          - link "Java Developer":
+            - /url: javascript:void(0);
+        - cell "Java Developer"
+        - cell "FTE"
+        - cell
+        - cell "2025-06-02"
+        - cell "2025-09-28"
+        - cell "Applied"
+        - cell "Applied":
+          - strong: Applied
+      - row "54 Laravel Programmer Laravel Developer Full Time 2025-05-30 L1-Scheduled Applied":
+        - cell "54"
+        - cell "Laravel Programmer":
+          - link "Laravel Programmer":
+            - /url: javascript:void(0);
+        - cell "Laravel Developer"
+        - cell "Full Time"
+        - cell
+        - cell "2025-05-30"
+        - cell
+        - cell "L1-Scheduled"
+        - cell "Applied":
+          - strong: Applied
+      - row "53 Java developer We are seeking a highly skilled and motivated Java Developer to join our growing engineering team. The ideal candidate will be responsible for designing, developing, and maintaining robust and scalable Java-based applications. You will work within an Agile environment, collaborating with cross-functional teams to deliver high-quality software solutions. Full Time 2025-05-27 L1-Scheduled Applied":
+        - cell "53"
+        - cell "Java developer":
+          - link "Java developer":
+            - /url: javascript:void(0);
+        - cell "We are seeking a highly skilled and motivated Java Developer to join our growing engineering team. The ideal candidate will be responsible for designing, developing, and maintaining robust and scalable Java-based applications. You will work within an Agile environment, collaborating with cross-functional teams to deliver high-quality software solutions."
+        - cell "Full Time"
+        - cell
+        - cell "2025-05-27"
+        - cell
+        - cell "L1-Scheduled"
+        - cell "Applied":
+          - strong: Applied
+      - row "46 Data engineer Laravel Developer Full Time 2025-04-23 2025-07-30 Applied Applied":
+        - cell "46"
+        - cell "Data engineer":
+          - link "Data engineer":
+            - /url: javascript:void(0);
+        - cell "Laravel Developer"
+        - cell "Full Time"
+        - cell
+        - cell "2025-04-23"
+        - cell "2025-07-30"
+        - cell "Applied"
+        - cell "Applied":
+          - strong: Applied
+      - row "37 Sales Manager leads a sales team, setting goals, developing strategies, and coaching representatives to achieve sales targets, while also managing budgets, analyzing performance, and building client relationships. FTE 2025-04-11 Applied Applied":
+        - cell "37"
+        - cell "Sales Manager":
+          - link "Sales Manager":
+            - /url: javascript:void(0);
+        - cell "leads a sales team, setting goals, developing strategies, and coaching representatives to achieve sales targets, while also managing budgets, analyzing performance, and building client relationships."
+        - cell "FTE"
+        - cell
+        - cell "2025-04-11"
+        - cell
+        - cell "Applied"
+        - cell "Applied":
+          - strong: Applied
+      - row "28 DevOps Engineer FTE 2025-04-07 L1-Reschedule Applied":
+        - cell "28"
+        - cell "DevOps Engineer":
+          - link "DevOps Engineer":
+            - /url: javascript:void(0);
+        - cell
+        - cell "FTE"
+        - cell
+        - cell "2025-04-07"
+        - cell
+        - cell "L1-Reschedule"
+        - cell "Applied":
+          - strong: Applied
+      - row "27 Cloud Engineer FTE 2025-04-07 Applied Applied":
+        - cell "27"
+        - cell "Cloud Engineer":
+          - link "Cloud Engineer":
+            - /url: javascript:void(0);
+        - cell
+        - cell "FTE"
+        - cell
+        - cell "2025-04-07"
+        - cell
+        - cell "Applied"
+        - cell "Applied":
+          - strong: Applied
+      - row "23 Test FTE 2025-03-27 Applied Applied":
+        - cell "23"
+        - cell "Test":
+          - link "Test":
+            - /url: javascript:void(0);
+        - cell
+        - cell "FTE"
+        - cell
+        - cell "2025-03-27"
+        - cell
+        - cell "Applied"
+        - cell "Applied":
+          - strong: Applied
+      - row "21 System Admin FTE 2025-03-24 Applied Applied":
+        - cell "21"
+        - cell "System Admin":
+          - link "System Admin":
+            - /url: javascript:void(0);
+        - cell
+        - cell "FTE"
+        - cell
+        - cell "2025-03-24"
+        - cell
+        - cell "Applied"
+        - cell "Applied":
+          - strong: Applied
+  - text: Showing data 1 to 9 of 9 entries
+  - button [disabled]:
+    - img
+  - button [disabled]:
+    - img
+  - button "1"
+  - button [disabled]:
+    - img
+  - button [disabled]:
+    - img
+- contentinfo:
+  - paragraph: Powered By TIUSureCafe
+  - paragraph:
+    - text: © 2024 All rights reserved.
+    - link "TIU Consulting":
+      - /url: https://www.tiuconsulting.com/
+```
