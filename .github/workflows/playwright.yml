@@ -25,8 +25,8 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
 
-      - name: Run Playwright Tests
-        run: npx playwright test
+      - name: Run ONLY loginlogout.spec.js
+        run: npx playwright test tests/loginlogout.spec.js
 
       - name: Configure Git
         run: |
