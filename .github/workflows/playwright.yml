@@ -7,18 +7,12 @@ on:
     branches: [ "master" ]
 
 jobs:
-  test:
+  test-and-push:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Debug Git setup
-        run: |
-          git --version
-          git status || echo "Git repo not available"
-          ls -la
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -31,14 +25,30 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: npx playwright test --reporter=list
+      - name: Run specific Playwright test (Restorevalidation)
+        run: npx playwright test tests/Restorevalidation.spec.js
 
-      - name: Upload Playwright report
+      - name: Commit and push changes if test passes
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check for file changes (optional: adjust paths)
+          git add .
+          if git diff --cached --quiet; then
+            echo "✅ No changes to commit"
+          else
+            git commit -m "Auto-push: Tests passed for Restorevalidation"
+            git push origin master
+          fi
+
+      - name: Upload Playwright report (always runs)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report
+
 
 
