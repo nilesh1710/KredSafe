@@ -5,7 +5,7 @@ test('Verify Notes', async ({ page }) => {
 
   await page.goto('https://dev.kredsafe.net/');
   await page.getByRole('textbox', { name: 'E-mail Address *' }).click();
-  await page.getByRole('textbox', { name: 'E-mail Address *' }).fill('ts1234@yopmail.com');
+  await page.getByRole('textbox', { name: 'E-mail Address *' }).fill('swapj@yopmail.com');
   await page.getByRole('textbox', { name: 'Password *' }).click();
   await page.getByRole('textbox', { name: 'Password *' }).fill('Nilesh@2025');
   await page.getByRole('button', { name: 'Login' }).click();
