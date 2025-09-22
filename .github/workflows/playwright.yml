@@ -1,4 +1,4 @@
-name: Run Notes.spec.js in Chrome
+name: Run Playwright Tests (Chrome Only) and Upload Report
 
 on:
   push:
@@ -7,46 +7,30 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-notes-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright with dependencies
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Notes.spec.js test in Chrome
-        run: npx playwright test tests/Notes.spec.js --project=chrome
+      - name: Run Notes.spec.js on Chrome
+        run: npx playwright test tests/Notes.spec.js --project=chrome --reporter=html
 
-      - name: Configure Git (for pushing results)
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Commit test results
-        run: |
-          git add -f test-results/ allure-results/ || echo "Nothing to add"
-          git commit -m "Auto-push: Notes.spec.js Chrome results" || echo "No changes to commit"
-
-      - name: Push results to master
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }} HEAD:master || echo "Push failed or no permission"
-
-      - name: Upload test results (optional)
+      - name: Upload Playwright HTML Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: test-results/
+          name: playwright-report
+          path: playwright-report/
