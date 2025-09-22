@@ -1,38 +1,37 @@
-name: Auto Push Changes
+name: Auto Commit and Push
 
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
-  update-and-push:
+  auto-commit:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Your script or commands to update files here
-      # For example: run tests, generate files, etc.
-      - name: Make changes
+      - name: Set Git config
         run: |
-          echo "Auto update" >> update.txt
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
 
-      - name: Commit changes
+      - name: Make changes (if any)
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Example change: touch a file (remove this block if not needed)
+          # touch update.log
+          echo "Run at $(date)" >> auto-log.txt
+
+      - name: Commit changes if any
+        run: |
           git add .
-          git diff --cached --quiet || git commit -m "Auto-push: update files"
+          git diff --cached --quiet || git commit -m "Auto-push: Changes committed by GitHub Actions"
 
-      - name: Push changes
+      - name: Push to master
         env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKENS }}
         run: |
           git push https://x-access-token:${PAT_TOKEN}@github.com/nilesh1710/KredSafe.git HEAD:master
-
-
-
-
-
