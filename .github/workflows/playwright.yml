@@ -25,8 +25,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run test in Chromium only
-        run: npx playwright test tests/Restorevalidation.spec.js --project=chromium
+      - name: Run test in Chrome only
+        run: npx playwright test tests/Restorevalidation.spec.js --project=chrome
 
       - name: Push code if test passed
         if: success()
@@ -38,9 +38,8 @@ jobs:
           if git diff --cached --quiet; then
             echo "✅ No changes to commit"
           else
-            git commit -m "Auto-push: Restorevalidation passed in Chromium"
+            git commit -m "Auto-push: Restorevalidation passed in Chrome"
             git push origin master
-          fi
 
 
 
