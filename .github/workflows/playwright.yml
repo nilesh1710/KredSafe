@@ -1,9 +1,6 @@
-name: Run Notes.spec.js on Chrome and Upload Report
+name: Playwright Tests
 
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
 
 jobs:
@@ -13,7 +10,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-         with:
+        with:
           submodules: true
 
       - name: Set up Node.js
@@ -31,7 +28,7 @@ jobs:
         run: npx playwright test tests/Notes.spec.js --project=chrome --reporter=html
 
       - name: Upload Playwright HTML Report
-        if: always()  # Run even if tests fail
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
