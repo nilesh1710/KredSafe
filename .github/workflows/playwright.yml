@@ -1,50 +1,36 @@
-name: Playwright Tests
+name: Auto Push Changes
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
 
 jobs:
-  test-and-push:
+  update-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      # Your script or commands to update files here
+      # For example: run tests, generate files, etc.
+      - name: Make changes
+        run: |
+          echo "Auto update" >> update.txt
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run test in Chrome only
-        run: npx playwright test tests/Restorevalidation.spec.js --project=chrome
-
-      - name: Push code if test passed
-        if: success()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Set remote with token authentication
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/nilesh1710/KredSafe.git
-          
           git add .
-          if git diff --cached --quiet; then
-            echo "✅ No changes to commit"
-          else
-            git commit -m "Auto-push: Restorevalidation passed in Chrome"
-            git push origin master
-          fi
+          git diff --cached --quiet || git commit -m "Auto-push: update files"
+
+      - name: Push changes
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git push https://x-access-token:${PAT_TOKEN}@github.com/nilesh1710/KredSafe.git HEAD:master
 
 
 
