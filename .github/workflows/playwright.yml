@@ -1,4 +1,4 @@
-name: Auto Commit and Push
+name: Run Playwright Tests and Push Results
 
 on:
   push:
@@ -7,31 +7,39 @@ on:
   workflow_dispatch:
 
 jobs:
-  auto-commit:
+  test-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set Git config
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright Tests
+        run: npx playwright test
+
+      - name: Configure Git
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Make changes (if any)
+      - name: Commit test results
         run: |
-          # Example change: touch a file (remove this block if not needed)
-          # touch update.log
-          echo "Run at $(date)" >> auto-log.txt
+          git add -f allure-results/ test-results/ || echo "Nothing to add"
+          git commit -m "Auto-push: Playwright test results" || echo "No changes to commit"
 
-      - name: Commit changes if any
-        run: |
-          git add .
-          git diff --cached --quiet || git commit -m "Auto-push: Changes committed by GitHub Actions"
-
-      - name: Push to master
+      - name: Push results to master
         env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKENS }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git push https://x-access-token:${PAT_TOKEN}@github.com/nilesh1710/KredSafe.git HEAD:master
+          git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }} HEAD:master
