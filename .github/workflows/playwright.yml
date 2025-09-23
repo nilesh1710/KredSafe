@@ -11,11 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository without submodules
         uses: actions/checkout@v3
-        # Remove or set submodules to false to avoid errors
         with:
           submodules: false
+          fetch-depth: 0  # fetch full history, optional but useful
+
+      - name: Remove leftover submodule config if any
+        run: |
+          git submodule deinit -f --all || echo "No submodules to deinit"
+          git rm --cached -r KredSafe || echo "No submodule KredSafe to remove"
+          git config --remove-section submodule.KredSafe || echo "No submodule section KredSafe to remove"
 
       - name: Cache Node.js modules
         uses: actions/cache@v3
