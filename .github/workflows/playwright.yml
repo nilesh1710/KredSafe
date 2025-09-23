@@ -30,10 +30,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright Tests
+      - name: Run Notes.spec.js on Chrome only
         run: npx playwright test tests/Notes.spec.js --project=chrome --reporter=html --config=playwright.config.js
 
       - name: Upload Playwright HTML Report
