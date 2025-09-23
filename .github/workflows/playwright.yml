@@ -45,3 +45,4 @@ jobs:
         with:
           name: playwright-report
           path: KredSafe/playwright-report/
+
