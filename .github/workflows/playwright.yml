@@ -29,15 +29,15 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        working-directory: KredSafe
+        working-directory: KredSafe  # ✅ Only keep this here if your package.json is inside KredSafe
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-        working-directory: KredSafe
+        working-directory: KredSafe  # ✅ Only keep this here if necessary
 
       - name: Run Notes.spec.js on Chrome only
         run: npx playwright test tests/Notes.spec.js --project=chrome --reporter=html
-        working-directory: KredSafe
+        working-directory: KredSafe  # ✅ Keep ONLY IF your config and tests are in KredSafe
 
       - name: Upload Playwright HTML Report
         if: always()
