@@ -1,4 +1,4 @@
-name: Run Subscriptiontotal Test (Firefox Only) and Push Results
+name: Run Subscriptiontotal Test in Firefox and Push Results
 
 on:
   push:
@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -22,23 +22,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright with dependencies
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run ONLY Subscriptiontotal.spec.js in Firefox (no retries)
+      - name: Run Subscriptiontotal.spec.js in Firefox
         run: npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
 
       - name: Configure Git
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Commit test results
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
           git commit -m "Auto-push: Subscriptiontotal Firefox test results" || echo "No changes to commit"
 
-      - name: Push changes back to repo
+      - name: Push results to master using PAT
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
