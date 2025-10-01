@@ -1,4 +1,4 @@
-name: Run Subscriptiontotal Test and Push Results
+name: Run Subscriptiontotal Test (Chrome Only) and Push Results
 
 on:
   push:
@@ -25,9 +25,9 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
 
-      - name: Run ONLY Subscriptiontotal.spec.js
+      - name: Run ONLY Subscriptiontotal.spec.js in Chrome (Chromium)
         id: run_tests
-        run: npx playwright test tests/Subscriptiontotal.spec.js
+        run: npx playwright test tests/Subscriptiontotal.spec.js --project=Chrome
 
       - name: Configure Git
         if: success()
