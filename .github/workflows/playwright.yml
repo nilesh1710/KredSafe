@@ -1,4 +1,4 @@
-name: Run Pendingactivity Test (Chrome Only) and Push Results
+name: Run Login Test (Chrome Only) and Push Results
 
 on:
   push:
@@ -25,9 +25,9 @@ jobs:
       - name: Install Playwright with dependencies
         run: npx playwright install --with-deps
 
-      - name: Run ONLY Pendingactivity.spec.js in Chrome (no retries)
+      - name: Run ONLY logintest.spec.js in Chrome (no retries)
         id: run_tests
-        run: npx playwright test tests/Pendingactivity.spec.js --project=chrome --retries=0
+        run: npx playwright test tests/logintest.spec.js --project=chrome --retries=0
 
       - name: Configure Git
         if: success()
@@ -39,7 +39,7 @@ jobs:
         if: success()
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
-          git commit -m "Auto-push: Playwright Pendingactivity test results" || echo "No changes to commit"
+          git commit -m "Auto-push: Playwright logintest test results" || echo "No changes to commit"
 
       - name: Push results to master
         if: success()
