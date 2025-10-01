@@ -38,7 +38,7 @@ jobs:
           git add -f allure-results/ test-results/ || echo "Nothing to add"
           git commit -m "Auto-push: Firefox test results" || echo "No changes to commit"
 
-      - name: Push to master with PAT
+      - name: Push to master using PAT
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
