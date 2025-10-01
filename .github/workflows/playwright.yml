@@ -1,4 +1,4 @@
-name: Run loginlogout Test (Chrome Only) and Push Results
+name: Run Subscriptiontotal Test (Chrome Only) and Push Results
 
 on:
   push:
@@ -25,9 +25,9 @@ jobs:
       - name: Install Playwright with dependencies
         run: npx playwright install --with-deps
 
-      - name: Run ONLY loginlogout.spec.js in Chrome
+      - name: Run ONLY Subscriptiontotal.spec.js in Chrome
         id: run_tests
-        run: npx playwright test tests/loginlogout.spec.js --project=chrome
+        run: npx playwright test tests/Subscriptiontotal.spec.js --project=chrome
 
       - name: Configure Git
         if: success()
@@ -39,7 +39,7 @@ jobs:
         if: success()
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
-          git commit -m "Auto-push: Playwright loginlogout test results" || echo "No changes to commit"
+          git commit -m "Auto-push: Playwright Subscriptiontotal test results" || echo "No changes to commit"
 
       - name: Push results to master
         if: success()
