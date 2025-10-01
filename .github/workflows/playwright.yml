@@ -1,20 +1,20 @@
-name: Playwright Firefox CI
+name: Playwright Firefox CI - Subscriptiontotal Test
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
-  test:
+  test-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -22,23 +22,33 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright
+      - name: Install Playwright and browsers
         run: npx playwright install --with-deps
 
-      - name: Run test in Firefox
+      - name: Run Subscriptiontotal.spec.js using Firefox
         run: npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
 
-      - name: Configure Git
+      - name: Configure Git (only if test passed)
+        if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit test results
+      - name: Commit test results (only if test passed)
+        if: success()
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
-          git commit -m "Auto-push: Firefox test results" || echo "No changes to commit"
+          git commit -m "Auto-push: Firefox Subscriptiontotal test results" || echo "No changes to commit"
 
-      - name: Push to master using PAT
+      - name: Debug Remote URL (only if test passed)
+        if: success()
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          echo "REMOTE: https://x-access-token:${TOKEN}@github.com/${{ github.repository }}"
+
+      - name: Push to master using PAT (only if test passed)
+        if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
