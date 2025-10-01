@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -22,25 +22,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers and dependencies
+      - name: Install Playwright
         run: npx playwright install --with-deps
 
-      - name: Run Subscriptiontotal.spec.js on Firefox only
+      - name: Run Subscriptiontotal.spec.js on Firefox
+        id: run_tests
         run: npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
 
-      - name: Configure Git (only if tests pass)
+      - name: Configure Git
         if: success()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit test results (only if tests pass)
+      - name: Commit test results
         if: success()
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
-          git commit -m "Auto-push: Playwright Subscriptiontotal test results" || echo "No changes to commit"
+          git commit -m "Auto-push: Firefox Subscriptiontotal test results" || echo "No changes to commit"
 
-      - name: Push results to master (only if tests pass)
+      - name: Push results to master
         if: success()
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
