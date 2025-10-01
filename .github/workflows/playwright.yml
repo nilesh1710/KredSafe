@@ -1,21 +1,56 @@
-name: CI
+name: Playwright Firefox CI - Subscriptiontotal Test
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
-  build:
+  test-and-push:
     runs-on: ubuntu-latest
-    env:
-      TOKEN: ${{ secrets.PAT_TOKEN }}
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Commit and push changes
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
-        git add .
-        git commit -m "Auto commit from workflow" || echo "No changes to commit"
-        git push origin HEAD:master
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright and browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Subscriptiontotal.spec.js using Firefox
+        run: npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
+
+      - name: Configure Git (only if test passed)
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit test results (only if test passed)
+        if: success()
+        run: |
+          git add -f allure-results/ test-results/ || echo "Nothing to add"
+          git commit -m "Auto-push: Firefox Subscriptiontotal test results" || echo "No changes to commit"
+
+      - name: Debug Remote URL (only if test passed)
+        if: success()
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          echo "REMOTE: https://x-access-token:${TOKEN}@github.com/${{ github.repository }}"
+
+      - name: Push to master using PAT (only if test passed)
+        if: success()
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
+          git push origin HEAD:master
