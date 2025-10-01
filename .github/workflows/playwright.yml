@@ -41,10 +41,9 @@ jobs:
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
           git commit -m "Auto-push: Subscriptiontotal Firefox test results" || echo "No changes to commit"
-
-      - name: Push results to master
-        if: success()
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }} HEAD:master
+      name: Push results to master
+  if: success()
+  env:
+    PAT: ${{ secrets.PAT_TOKEN }}
+  run: |
+    git push https://x-access-token:${PAT}@github.com/${{ github.repository }} HEAD:master
