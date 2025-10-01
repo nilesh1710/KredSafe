@@ -30,7 +30,7 @@ jobs:
         run: |
           npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
 
-      - name: Configure Git for pushing
+      - name: Configure Git for commit
         if: success()
         run: |
           git config --global user.name "github-actions[bot]"
@@ -41,9 +41,10 @@ jobs:
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
           git commit -m "Auto-push: Subscriptiontotal Firefox test results" || echo "No changes to commit"
-      name: Push results to master
-  if: success()
-  env:
-    PAT: ${{ secrets.PAT_TOKEN }}
-  run: |
-    git push https://x-access-token:${PAT}@github.com/${{ github.repository }} HEAD:master
+
+      - name: Push results to master
+        if: success()
+        env:
+          PAT: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git push https://x-access-token:${PAT}@github.com/${{ github.repository }} HEAD:master
