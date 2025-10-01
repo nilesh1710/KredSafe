@@ -1,20 +1,20 @@
-name: Run Subscriptiontotal Test in Firefox and Push Results
+name: Playwright Firefox CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
-  workflow_dispatch:
 
 jobs:
-  test-and-push:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -22,10 +22,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
+      - name: Install Playwright
         run: npx playwright install --with-deps
 
-      - name: Run Subscriptiontotal.spec.js in Firefox
+      - name: Run test in Firefox
         run: npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
 
       - name: Configure Git
@@ -36,11 +36,11 @@ jobs:
       - name: Commit test results
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
-          git commit -m "Auto-push: Subscriptiontotal Firefox test results" || echo "No changes to commit"
+          git commit -m "Auto-push: Firefox test results" || echo "No changes to commit"
 
-      - name: Push results to master using PAT
+      - name: Push to master with PAT
         env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+          TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
           git push origin HEAD:master
