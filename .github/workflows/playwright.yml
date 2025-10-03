@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # required to push to repo
+  contents: write  # needed for pushing changes
 
 jobs:
-  test-and-push:
+  test-and-update:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,43 +25,35 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright and browsers
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run loginp.spec.js using Firefox
+      - name: Run Playwright tests
         run: npx playwright test tests/loginp.spec.js --project=firefox --retries=0
 
-      - name: Append timestamp to loginp.spec.js (only if test passed)
+      - name: Append auto-update comment if test passed
         if: success()
         run: |
-          echo -e "\n// Auto-update on $(date -u)" >> tests/loginp.spec.js
+          FILE="tests/loginp.spec.js"
+          LAST_LINE=$(tail -n 1 "$FILE")
+          TODAY_COMMENT="// Auto-update on $(date -u +'%Y-%m-%d')"
+          if [[ "$LAST_LINE" != *"$TODAY_COMMENT"* ]]; then
+            echo "" >> "$FILE"
+            echo "$TODAY_COMMENT" >> "$FILE"
+          fi
 
-      - name: Show last 10 lines of loginp.spec.js (debug)
+      - name: Commit changes if any
         if: success()
-        run: tail -n 10 tests/loginp.spec.js
-
-      - name: Check git status and staged diff (debug)
-        if: success()
-        run: |
-          git status
-          git diff --cached || echo "No changes staged"
-
-      - name: Commit and push if there are changes
-        if: success()
-        env:
-          TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add tests/loginp.spec.js
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Auto-update timestamp $(date -u)"
-            git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git"
-            git push origin HEAD:master
-          fi
+          git diff --cached --quiet || git commit -m "Auto-update loginp.spec.js on $(date -u)"
 
-      - name: Debug Git remotes (optional)
+      - name: Push changes back to GitHub
         if: success()
-        run: git remote -v
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
+          git push origin HEAD:master
