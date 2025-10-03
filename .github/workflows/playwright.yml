@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # Required to push to repo
+  contents: write  # needed for push
 
 jobs:
   test-and-push:
@@ -48,6 +48,9 @@ jobs:
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git remote remove origin || true
-          git remote add origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
           git push origin HEAD:master
+
+      - name: Debug Git remotes (optional)
+        if: success()
+        run: git remote -v
