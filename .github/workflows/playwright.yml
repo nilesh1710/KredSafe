@@ -1,36 +1,53 @@
-name: Push to Master
+name: Playwright Firefox CI - Subscriptiontotal Test
 
 on:
   push:
     branches:
-      - main  # Change this to 'master' if your default branch is master
-
-permissions:
-  contents: write  # ✅ Needed to allow push access to the repo
+      - master
+  workflow_dispatch:
 
 jobs:
-  push-to-master:
+  test-and-push:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Configure Git identity
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-      - name: Create a dummy commit (for testing only)
-        run: |
-          echo "Test file generated at $(date)" >> dummy.txt
-          git add dummy.txt
-          git commit -m "Add dummy file to test push" || echo "Nothing to commit"
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Set authenticated remote URL
-        run: |
-          git remote set-url origin "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nilesh1710/KredSafe.git"
+      - name: Install Playwright and browsers
+        run: npx playwright install --with-deps
 
-      - name: Push to master
+      - name: Run Subscriptiontotal.spec.js using Firefox
+        run: npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
+
+      - name: Configure Git (only if test passed)
+        if: success()
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Commit test results (only if test passed)
+        if: success()
+        run: |
+          git add -f allure-results/ test-results/ || echo "Nothing to add"
+          git commit -m "Auto-push: Firefox Subscriptiontotal test results" || echo "No changes to commit"
+      - name: Debug Remote URL (only if test passed)
+        if: success()
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          echo "REMOTE: https://x-access-token:${TOKEN}@github.com/${{ github.repository }}"
+      - name: Push to master using PAT (only if test passed)
+        if: success()
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
           git push origin HEAD:master
