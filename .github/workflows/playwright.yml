@@ -1,4 +1,4 @@
-name: Playwright Test and Update Script
+name: Playwright Firefox CI - Subscriptiontotal Test
 
 on:
   push:
@@ -7,17 +7,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write  # required to commit & push
 
 jobs:
   test-and-update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -28,54 +28,32 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run tests (simple test file)
-        run: npx playwright test tests/loginp.spec.js --retries=0
+      - name: Run Playwright tests
+        run: npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
 
-      - name: Overwrite test file with full version (only if tests pass)
+      - name: Append auto-update comment if test passed
         if: success()
         run: |
-cat <<EOF > tests/loginp.spec.js
-import { test, expect } from '@playwright/test';
-
-test('Verify Subscription display', async ({ page }) => {
-    test.setTimeout(90000); // 60 seconds
-
-  await page.goto('https://dev.kredsafe.net/login');
-  await page.locator('//input[@name="email"]').fill('swapj@yopmail.com');
-  await page.locator('//input[@name="password"]').fill('Nilesh@2025');
-  await page.locator('//*[@id="id_frm_submit"]').click();
-  await page.goto('https://dev.kredsafe.net/user/subscription/dashboard');
-  await page.waitForLoadState('networkidle');
-
-  // Scroll down function
-  await page.evaluate(() => window.scrollBy(0, window.innerHeight));
-
-  // Grab the subscription values by selectors
-  const subscriptionValue = await page.textContent("span.pill.green");
-  console.log("Subscription - " + subscriptionValue.trim());
-
-  const formsPacketValue = await page.textContent("span.pill.yellow");
-  console.log("Forms and Packet - " + formsPacketValue.trim());
-
-  const totalValue = await page.textContent("span.pill.red");
-  console.log("Total - " + totalValue.trim());
-});
-
-// Auto-update on \$(date -u +'%Y-%m-%d')
-EOF
-
-      - name: Commit updated test file
+          FILE="tests/Subscriptiontotal.spec.js"
+          LAST_LINE=$(tail -n 1 "$FILE")
+          TODAY_COMMENT="// Auto-update on $(date -u +'%Y-%m-%d')"
+          if [[ "$LAST_LINE" != *"$TODAY_COMMENT"* ]]; then
+            echo "" >> "$FILE"
+            echo "$TODAY_COMMENT" >> "$FILE"
+          fi
+      - name: Commit changes if any
         if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add tests/loginp.spec.js
-          git diff --cached --quiet || git commit -m "Update test to full version on $(date -u)"
-
-      - name: Push changes
+          git add tests/Subscriptiontotal.spec.js
+          git diff --cached --quiet || git commit -m "Auto-update Subscriptiontotal.spec.js on $(date -u)"
+      - name: Push changes back to GitHub
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
+          TOKEN_CLEAN=$(echo -n "${TOKEN}" | tr -d '\n\r ')
+          REMOTE_URL="https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
+          git remote set-url origin "${REMOTE_URL}"
           git push origin HEAD:master
