@@ -50,16 +50,12 @@ jobs:
           git add tests/Subscriptiontotal.spec.js
           git diff --cached --quiet || git commit -m "Auto-update Subscriptiontotal.spec.js on $(date -u)"
 
-      - name: Debug TOKEN length
-        if: success()
-        env:
-          TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: echo "TOKEN length is ${#TOKEN}"
-
       - name: Push changes back to GitHub
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git"
+          TOKEN_CLEAN=$(echo -n "${TOKEN}" | tr -d '\n\r ')
+          REMOTE_URL="https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
+          git remote set-url origin "${REMOTE_URL}"
           git push origin HEAD:master
