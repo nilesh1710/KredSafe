@@ -1,4 +1,4 @@
-name: Playwright Firefox CI - Loginp Test
+name: Playwright Firefox CI - Subscriptiontotal Test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # needed for pushing changes
+  contents: write  # required to commit & push
 
 jobs:
   test-and-update:
@@ -29,12 +29,14 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npx playwright test tests/loginp.spec.js --project=firefox --retries=0
+        run: npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0
 
       - name: Append auto-update comment if test passed
         if: success()
         run: |
-          FILE="tests/loginp.spec.js"
+          FILE="tests/Subscriptiontotal.spec.js"
+          TMPFILE=$(mktemp)
+          # Check if last line already has auto-update comment with today's date
           LAST_LINE=$(tail -n 1 "$FILE")
           TODAY_COMMENT="// Auto-update on $(date -u +'%Y-%m-%d')"
           if [[ "$LAST_LINE" != *"$TODAY_COMMENT"* ]]; then
@@ -47,8 +49,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add tests/loginp.spec.js
-          git diff --cached --quiet || git commit -m "Auto-update loginp.spec.js on $(date -u)"
+          git add tests/Subscriptiontotal.spec.js
+          git diff --cached --quiet || git commit -m "Auto-update Subscriptiontotal.spec.js on $(date -u)"
 
       - name: Push changes back to GitHub
         if: success()
