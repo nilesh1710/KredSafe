@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # required to push to repo
+  contents: write  # Needed for pushing changes
 
 jobs:
   test-and-push:
@@ -69,13 +69,13 @@ test('Verify Subscription display', async ({ page }) => {
 });
 EOF
 
-      - name: Commit updated test code (only if test passed)
+      - name: Commit test results and updated spec (only if test passed)
         if: success()
         run: |
-          git add tests/Subscriptiontotal.spec.js
-          git commit -m "Auto-update: Subscriptiontotal.spec.js test code" || echo "No changes to commit"
+          git add tests/Subscriptiontotal.spec.js || echo "Nothing to add"
+          git commit -m "Auto-update Subscriptiontotal.spec.js on $(date)" || echo "No changes to commit"
 
-      - name: Push changes to master (only if test passed)
+      - name: Push to master using PAT (only if test passed)
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
