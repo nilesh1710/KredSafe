@@ -1,4 +1,4 @@
-name: Playwright Firefox CI - Subscriptiontotal Test
+name: Playwright Firefox CI - login Test
 
 on:
   push:
@@ -28,10 +28,10 @@ jobs:
       - name: Install Playwright and browsers
         run: npx playwright install --with-deps
 
-      - name: Run Subscriptiontotal test and capture output
+      - name: Run Verify Subscription display test and capture output
         run: |
           mkdir -p results
-          npx playwright test tests/Subscriptiontotal.spec.js --project=firefox --retries=0 | tee results/test-output.log
+          npx playwright test tests/loginp.spec.js --project=firefox --retries=0 | tee results/test-output.log
 
       - name: Configure Git
         run: |
