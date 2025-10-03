@@ -36,13 +36,15 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
+      - name: Make dummy change (only if test passed)
+        if: success()
+        run: |
+          echo "// Auto-update on $(date)" >> tests/Subscriptiontotal.spec.js
       - name: Commit test results or changes (only if test passed)
         if: success()
         run: |
           git add . || echo "Nothing to add"
           git commit -m "Auto-push: Firefox Subscriptiontotal test results" || echo "No changes to commit"
-
       - name: Push to master using PAT (only if test passed)
         if: success()
         env:
@@ -54,7 +56,6 @@ jobs:
           echo "Setting remote to: https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
           git remote set-url origin "https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
           git push origin HEAD:master
-
       - name: Debug Git remotes (optional)
         if: success()
         run: git remote -v
