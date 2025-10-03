@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('Verify Subscription display', async ({ page }) => {
-    test.setTimeout(90000); // 60 seconds
+    test.setTimeout(60000); // 60 seconds
 
   await page.goto('https://dev.kredsafe.net/login');
   await page.locator('//input[@name="email"]').fill('swapj@yopmail.com');
@@ -23,6 +23,7 @@ await page.waitForLoadState('networkidle');
 
   const totalValue = await page.textContent("span.pill.red");
    console.log("Total - " + totalValue.trim());
+
 
 });
 // Auto-update on Fri, Oct  3, 2025  7:24:41 AM
