@@ -3,28 +3,31 @@ name: Push to Master
 on:
   push:
     branches:
-      - main  # Adjust this if your default branch is 'master'
+      - main  # Change this to 'master' if your default branch is master
 
 permissions:
-  contents: write  # ✅ Required to push code via actions
+  contents: write  # ✅ Needed to allow push access to the repo
 
 jobs:
-  deploy:
+  push-to-master:
     runs-on: ubuntu-latest
-
-    env:
-      PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Configure Git
+      - name: Configure Git identity
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
 
-      - name: Set remote URL with PAT
+      - name: Create a dummy commit (for testing only)
+        run: |
+          echo "Test file generated at $(date)" >> dummy.txt
+          git add dummy.txt
+          git commit -m "Add dummy file to test push" || echo "Nothing to commit"
+
+      - name: Set authenticated remote URL
         run: |
           git remote set-url origin "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nilesh1710/KredSafe.git"
 
