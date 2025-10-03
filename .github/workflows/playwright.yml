@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # needed for pushing changes
+  contents: write  # required to push to repo
 
 jobs:
   test-and-push:
@@ -37,10 +37,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit test results (only if test passed)
+      - name: Make dummy change (only if test passed)
         if: success()
         run: |
-          git add -f allure-results/ test-results/ || echo "Nothing to add"
+          echo "// Auto-update on $(date)" >> tests/Subscriptiontotal.spec.js
+
+      - name: Commit test results or changes (only if test passed)
+        if: success()
+        run: |
+          git add . || echo "Nothing to add"
           git commit -m "Auto-push: Firefox Subscriptiontotal test results" || echo "No changes to commit"
 
       - name: Push to master using PAT (only if test passed)
