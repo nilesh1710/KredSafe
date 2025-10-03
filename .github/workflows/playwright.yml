@@ -73,7 +73,7 @@ EOF
         if: success()
         run: |
           git add tests/Subscriptiontotal.spec.js || echo "Nothing to add"
-          git commit -m "Auto-update: Firefox Subscriptiontotal.spec.js test code" || echo "No changes to commit"
+          git commit -m "Auto-push: Updated Subscriptiontotal.spec.js test" || echo "No changes to commit"
 
       - name: Push to master using PAT (only if test passed)
         if: success()
