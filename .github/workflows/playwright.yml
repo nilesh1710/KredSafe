@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # required for pushing changes
+  contents: write  # required to push changes back to the repo
 
 jobs:
   test-and-push:
