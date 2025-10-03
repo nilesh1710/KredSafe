@@ -35,8 +35,6 @@ jobs:
         if: success()
         run: |
           FILE="tests/Subscriptiontotal.spec.js"
-          TMPFILE=$(mktemp)
-          # Check if last line already has auto-update comment with today's date
           LAST_LINE=$(tail -n 1 "$FILE")
           TODAY_COMMENT="// Auto-update on $(date -u +'%Y-%m-%d')"
           if [[ "$LAST_LINE" != *"$TODAY_COMMENT"* ]]; then
@@ -52,10 +50,16 @@ jobs:
           git add tests/Subscriptiontotal.spec.js
           git diff --cached --quiet || git commit -m "Auto-update Subscriptiontotal.spec.js on $(date -u)"
 
+      - name: Debug TOKEN length
+        if: success()
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: echo "TOKEN length is ${#TOKEN}"
+
       - name: Push changes back to GitHub
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
+          git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git"
           git push origin HEAD:master
