@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # required to push to repo
+  contents: write  # required for pushing changes
 
 jobs:
   test-and-push:
@@ -37,28 +37,51 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Make dummy change (only if test passed)
+      - name: Overwrite Subscriptiontotal.spec.js with updated test (only if test passed)
         if: success()
         run: |
-          echo "// Auto-update on $(date)" >> tests/Subscriptiontotal.spec.js
+          cat > tests/Subscriptiontotal.spec.js << 'EOF'
+import { test, expect } from '@playwright/test';
+
+test('Verify Subscription display', async ({ page }) => {
+  test.setTimeout(90000); // 60 seconds
+
+  await page.goto('https://dev.kredsafe.net/login');
+  await page.locator('//input[@name="email"]').fill('swapj@yopmail.com');
+  await page.locator('//input[@name="password"]').fill('Nilesh@2025');
+  await page.locator('//*[@id="id_frm_submit"]').click();
+  await page.goto('https://dev.kredsafe.net/user/subscription/dashboard');
+  await page.waitForLoadState('networkidle');
+
+  // Scroll down function
+  await page.evaluate(() => window.scrollBy(0, window.innerHeight));
+
+  // Grab the subscription values by selectors
+  const subscriptionValue = await page.textContent("span.pill.green");
+  console.log("Subscription - " + subscriptionValue.trim());
+
+  const formsPacketValue = await page.textContent("span.pill.yellow");
+  console.log("Forms and Packet - " + formsPacketValue.trim());
+
+  const totalValue = await page.textContent("span.pill.red");
+  console.log("Total - " + totalValue.trim());
+});
+EOF
 
       - name: Commit test results or changes (only if test passed)
         if: success()
         run: |
-          git add . || echo "Nothing to add"
-          git commit -m "Auto-push: Firefox Subscriptiontotal test results" || echo "No changes to commit"
+          git add tests/Subscriptiontotal.spec.js || echo "Nothing to add"
+          git commit -m "Auto-push: Updated Subscriptiontotal.spec.js test" || echo "No changes to commit"
 
       - name: Push to master using PAT (only if test passed)
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          echo "TOKEN length before trimming: ${#TOKEN}"
           TOKEN_CLEAN=$(echo -n "${TOKEN}" | tr -d '[:space:]')
-          echo "TOKEN length after trimming: ${#TOKEN_CLEAN}"
-          echo "Setting remote to: https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
           git remote set-url origin "https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
-          git push origin HEAD:master
+          git push origin HEAD: master
 
       - name: Debug Git remotes (optional)
         if: success()
