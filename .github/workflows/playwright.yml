@@ -6,6 +6,9 @@ on:
       - master
   workflow_dispatch:
 
+permissions:
+  contents: write  # Required to push to repo
+
 jobs:
   test-and-push:
     runs-on: ubuntu-latest
@@ -33,21 +36,18 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Commit test results (only if test passed)
         if: success()
         run: |
           git add -f allure-results/ test-results/ || echo "Nothing to add"
           git commit -m "Auto-push: Firefox Subscriptiontotal test results" || echo "No changes to commit"
-      - name: Debug Remote URL (only if test passed)
-        if: success()
-        env:
-          TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          echo "REMOTE: https://x-access-token:${TOKEN}@github.com/${{ github.repository }}"
+
       - name: Push to master using PAT (only if test passed)
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
+          git remote remove origin || true
+          git remote add origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
           git push origin HEAD:master
