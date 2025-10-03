@@ -78,10 +78,10 @@ EOF
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          TOKEN_CLEAN=$(echo -n "${TOKEN}" | tr -d '[:space:]')
-          git remote set-url origin "https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
-          git push origin HEAD:master
+  run: |
+  TOKEN_CLEAN=$(echo -n "${TOKEN}" | tr -d '[:space:]')
+  git remote set-url origin "https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
+  git push origin HEAD: master
 
       - name: Debug Git remotes (optional)
         if: success()
