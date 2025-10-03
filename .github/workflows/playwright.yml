@@ -72,10 +72,10 @@ EOF
           git add tests/loginp.spec.js
           git diff --cached --quiet || git commit -m "Update test to full version on $(date -u)"
 
-      - name: Push changes
+   name: Push changes
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
-          git push origin HEAD: master
+          git push origin HEAD:master
