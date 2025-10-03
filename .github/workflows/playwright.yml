@@ -1,4 +1,4 @@
-name: Playwright Firefox CI - login Test
+name: Playwright Firefox CI - Loginp Test
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write  # required to push to repo
 
 jobs:
   test-and-push:
@@ -28,39 +28,40 @@ jobs:
       - name: Install Playwright and browsers
         run: npx playwright install --with-deps
 
-      - name: Run Verify Subscription display test and capture output
+      - name: Run loginp.spec.js using Firefox
+        run: npx playwright test tests/loginp.spec.js --project=firefox --retries=0
+
+      - name: Append timestamp to loginp.spec.js (only if test passed)
+        if: success()
         run: |
-          mkdir -p results
-          npx playwright test tests/loginp.spec.js --project=firefox --retries=0 | tee results/test-output.log
+          echo -e "\n// Auto-update on $(date -u)" >> tests/loginp.spec.js
 
-      - name: Configure Git
+      - name: Show last 10 lines of loginp.spec.js (debug)
+        if: success()
+        run: tail -n 10 tests/loginp.spec.js
+
+      - name: Check git status and staged diff (debug)
+        if: success()
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git status
+          git diff --cached || echo "No changes staged"
 
-      - name: Commit only if test output changed
-        run: |
-          git fetch origin master
-          git checkout master
-
-          # Backup old output
-          cp results/test-output.log old-output.log || true
-          git show origin/master:results/test-output.log > old-output.log || echo "" > old-output.log
-
-          # Compare
-          if ! diff -q old-output.log results/test-output.log > /dev/null; then
-            echo "✅ Test output changed. Committing..."
-            git add results/test-output.log
-            git commit -m "Auto-push: updated test output from Firefox test"
-          else
-            echo "🟡 No changes in test output. Skipping commit."
-          fi
-
-      - name: Push to master
+      - name: Commit and push if there are changes
         if: success()
         env:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          TOKEN_CLEAN=$(echo -n "${TOKEN}" | tr -d '[:space:]')
-          git remote set-url origin "https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
-          git push origin HEAD
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tests/loginp.spec.js
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update timestamp $(date -u)"
+            git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git"
+            git push origin HEAD:master
+          fi
+
+      - name: Debug Git remotes (optional)
+        if: success()
+        run: git remote -v
