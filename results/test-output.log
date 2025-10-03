@@ -1,6 +1,28 @@
 
 Running 1 test using 1 worker
 
-  ✓  1 [firefox] › tests/Subscriptiontotal.spec.js:3:5 › Verify Subscription display (2.6s)
+  ✘  1 [firefox] › tests/loginp.spec.js:3:5 › Verify Subscription display (1.5m)
 
-  1 passed (4.4s)
+
+  1) [firefox] › tests/loginp.spec.js:3:5 › Verify Subscription display ────────────────────────────
+
+    [31mTest timeout of 90000ms exceeded.[39m
+
+    Error: page.textContent: Test timeout of 90000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('span.pill.green')[22m
+
+
+      16 |
+      17 |   // Grab the subscription values by selectors
+    > 18 |    const subscriptionValue = await page.textContent("span.pill.green");
+         |                                         ^
+      19 |   console.log("Subscription - " + subscriptionValue.trim());
+      20 |
+      21 |   const formsPacketValue = await page.textContent("span.pill.yellow");
+        at /home/runner/work/KredSafe/KredSafe/tests/loginp.spec.js:18:41
+
+    Error Context: test-results/loginp-Verify-Subscription-display-firefox/error-context.md
+
+  1 failed
+    [firefox] › tests/loginp.spec.js:3:5 › Verify Subscription display ─────────────────────────────
