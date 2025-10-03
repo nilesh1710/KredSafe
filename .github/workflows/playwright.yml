@@ -28,4 +28,4 @@ jobs:
 
       - name: Push to master
         run: |
-          git push origin HEAD: master
+          git push origin HEAD:master
