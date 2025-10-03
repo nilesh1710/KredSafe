@@ -7,12 +7,22 @@ test('Verify Subscription display', async ({ page }) => {
   await page.locator('//input[@name="email"]').fill('swapj@yopmail.com');
 await page.locator('//input[@name="password"]').fill('Nilesh@2025');
 await page.locator('//*[@id="id_frm_submit"]').click();
+await page.goto('https://dev.kredsafe.net/user/subscription/dashboard');
+await page.waitForLoadState('networkidle');
 
+  // Scroll down function
+  await page.evaluate(() => window.scrollBy(0, window.innerHeight));
 
-});// Auto-update on Fri Oct  3 05:39:06 UTC 2025
-// Auto-update on Fri Oct  3 06:00:36 UTC 2025
-// Auto-update on Fri Oct  3 06:27:12 UTC 2025
-// Auto-update on Fri Oct  3 06:34:33 UTC 2025
-// Auto-update on Fri Oct  3 06:43:18 UTC 2025
+  // Grab the subscription values by selectors
+    // Print values
+   const subscriptionValue = await page.textContent("span.pill.green");
+  console.log("Subscription - " + subscriptionValue.trim());
 
-// Auto-update on 2025-10-03
+  const formsPacketValue = await page.textContent("span.pill.yellow");
+   console.log("Forms and Packet - " + formsPacketValue.trim());
+
+  const totalValue = await page.textContent("span.pill.red");
+   console.log("Total - " + totalValue.trim());
+
+});
+// Auto-update on Fri, Oct  3, 2025  7:24:41 AM
