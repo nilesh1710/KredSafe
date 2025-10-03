@@ -58,7 +58,7 @@ jobs:
           echo "TOKEN length after trimming: ${#TOKEN_CLEAN}"
           echo "Setting remote to: https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
           git remote set-url origin "https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
-          git push origin HEAD: master
+          git push origin HEAD:master
 
       - name: Debug Git remotes (optional)
         if: success()
