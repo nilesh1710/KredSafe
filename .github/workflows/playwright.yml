@@ -49,7 +49,7 @@ jobs:
           TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           echo "TOKEN length before trimming: ${#TOKEN}"
-          TOKEN_CLEAN=$(echo -n "${TOKEN}" | tr -d '\r\n')
+          TOKEN_CLEAN=$(echo -n "${TOKEN}" | tr -d '[:space:]')
           echo "TOKEN length after trimming: ${#TOKEN_CLEAN}"
           echo "Setting remote to: https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
           git remote set-url origin "https://x-access-token:${TOKEN_CLEAN}@github.com/${{ github.repository }}.git"
