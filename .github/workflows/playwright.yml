@@ -3,7 +3,10 @@ name: Push to Master
 on:
   push:
     branches:
-      - main  # or your triggering branch
+      - main  # Adjust this if your default branch is 'master'
+
+permissions:
+  contents: write  # ✅ Required to push code via actions
 
 jobs:
   deploy:
@@ -23,9 +26,8 @@ jobs:
 
       - name: Set remote URL with PAT
         run: |
-          CLEAN_PAT=$(echo -n "$PAT_TOKEN")
-          git remote set-url origin "https://x-access-token:${CLEAN_PAT}@github.com/nilesh1710/KredSafe.git"
+          git remote set-url origin "https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/nilesh1710/KredSafe.git"
 
       - name: Push to master
         run: |
-          git push origin HEAD: master
+          git push origin HEAD:master
