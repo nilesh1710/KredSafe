@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const testData = [
   { email: 'user1@yopmail.com', password: 'pass1' },
   { email: 'user2@yopmail.com', password: 'pass2' },
-  { email: 'hrd786@yopmail.com', password: 'Nilesh@2025' },
+  { email: 'sawpj@yopmail.com', password: 'Nilesh@2025' },
 ];
 
 test.describe('Login tests - Data Driven', () => {

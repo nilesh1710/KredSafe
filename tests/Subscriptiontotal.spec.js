@@ -1,29 +1,37 @@
 import { test, expect } from '@playwright/test';
+import { clearScreenDown } from 'readline';
 
 test('Verify Subscription display', async ({ page }) => {
-    test.setTimeout(60000); // 60 seconds
+  // Set test timeout (use test.setTimeout outside the test body)
+  test.setTimeout(60000);
 
-  await page.goto('https://dev.kredsafe.net/login');
-  await page.locator('//input[@name="email"]').fill('swapj@yopmail.com');
-await page.locator('//input[@name="password"]').fill('Nilesh@2025');
-await page.locator('//*[@id="id_frm_submit"]').click();
-await page.goto('https://dev.kredsafe.net/user/subscription/dashboard');
-await page.waitForLoadState('networkidle');
+  await page.goto('https://dev.kredsafe.net/');
+  await page.waitForLoadState('load');
 
-  // Scroll down function
-  await page.evaluate(() => window.scrollBy(0, window.innerHeight));
+  // Login
+  await page.locator('//input[@name="email"]').fill('sep10@yopmail.com');
+  await page.locator('//input[@name="password"]').fill('Nilesh@2025');
+  await page.locator('//*[@id="id_frm_submit"]').click();
 
-  // Grab the subscription values by selectors
-    // Print values
-   const subscriptionValue = await page.textContent("span.pill.green");
-  console.log("Subscription - " + subscriptionValue.trim());
+  // Navigate to subscription dashboard
+  await page.goto('https://dev.kredsafe.net/user/subscription/dashboard');
+  await page.waitForLoadState('load');
 
-  const formsPacketValue = await page.textContent("span.pill.yellow");
-   console.log("Forms and Packet - " + formsPacketValue.trim());
-
-  const totalValue = await page.textContent("span.pill.red");
-   console.log("Total - " + totalValue.trim());
-
-
+  // Wait until network is idle (all requests finished)
+  await page.waitForLoadState('networkidle');
+await page.evaluate(() => {
+  window.scrollBy(0, window.innerHeight);
 });
-// Auto-update on Fri, Oct  3, 2025  7:24:41 AM
+
+await page.waitForTimeout(2000);
+
+
+  const subscriptionValue = await page.textContent('span.pill.green');
+  console.log('Subscription - ' + subscriptionValue.trim());
+
+  const formsPacketValue = await page.textContent('span.pill.yellow');
+  console.log('Forms and Packet - ' + formsPacketValue.trim());
+
+  const totalValue = await page.textContent('span.pill.red');
+  console.log('Total - ' + totalValue.trim());
+});

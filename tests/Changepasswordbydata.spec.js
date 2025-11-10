@@ -22,7 +22,7 @@ test.describe('Data-driven Change Password (with login)', () => {
 
       // Step 1: Login
       await page.goto('https://dev.kredsafe.net/login');
-      await page.locator('//input[@name="email"]').fill('ts1234@yopmail.com');
+      await page.locator('//input[@name="email"]').fill('sep10@yopmail.com');
       await page.locator('//input[@name="password"]').fill('Nilesh@2025');
       await page.locator('//*[@id="id_frm_submit"]').click();
       await page.waitForTimeout(5000);
@@ -35,7 +35,6 @@ test.describe('Data-driven Change Password (with login)', () => {
       await page.locator('//*[@id="oldpassword"]').fill(data.oldPassword);
       await page.locator('//*[@id="passwordch"]').fill(data.newPassword);
       await page.locator('//*[@id="password_conf"]').fill(data.confirmPassword);
-
       // Step 4: Submit the form
       await page.locator('//*[@id="id_frm_submit"]').click();
 

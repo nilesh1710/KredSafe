@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('Verify Change password', async ({ page }) => {
+test('Verify Change password by data driven csv', async ({ page }) => {
       test.setTimeout(60000); // 60 seconds
 
   await page.goto('https://dev.kredsafe.net/login');

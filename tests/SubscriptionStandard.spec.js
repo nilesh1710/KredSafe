@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-test('complete subscription and payment flow', async ({ page }) => {
+test('Verify Subscription total', async ({ page }) => {
 test.setTimeout(60000);
   await page.goto('https://dev.kredsafe.net/login');
-
-  // Login
   await page.getByRole('textbox', { name: 'E-mail Address *' }).fill('hrd14566@yopmail.com');
   await page.getByRole('textbox', { name: 'Password *' }).fill('Nilesh@2025');
   await page.getByRole('button', { name: 'Login' }).click();
